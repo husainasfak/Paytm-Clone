@@ -1,6 +1,7 @@
 const express = require('express')
 
 const USER = require('../models/User.models')
+const ACCOUNT = require('../models/Account.model')
 const jwt = require('jsonwebtoken')
 const { signupBody, signinBody, updateUserBody } = require('../BodyValidation')
 const authMiddleware = require('../middleware/auth')
@@ -32,6 +33,12 @@ router.post('/signup', async (req, res) => {
           const { username, firstname, lastname } = req.body
           if (user) {
                const userId = user._id;
+
+
+               await ACCOUNT.create({
+                    userId,
+                    balance: 1 + Math.random() * 10000
+               })
                const token = jwt.sign({
                     userId,
                     username,
